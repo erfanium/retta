@@ -4,19 +4,21 @@ export interface Dataset {
 }
 
 export interface User {
+  id: string;
   registerDay: number;
   retention: {
     dataAvailable: boolean | null;
     heatmap: number[];
   };
   latestActivities: number[];
-  nActiveDays: number;
+  sumLatestActivities: number;
   latestEventDate: Date;
   firstAvailableEventDate: Date;
 }
 
 const twoMin = 2 * 60 * 1000;
-export const dateToDay = (d: Date) => Math.floor(d.getTime() / (1000 * 60 * 60 * 24));
+export const dateToDay = (d: Date) =>
+  Math.floor(d.getTime() / (1000 * 60 * 60 * 24));
 
 function addUser(
   users: Record<string, User>,
@@ -27,13 +29,15 @@ function addUser(
   const registerDay = dateToDay(registerDate);
 
   const u: User = {
+    id,
     registerDay,
     retention: {
       dataAvailable: null,
       heatmap: new Array(14).fill(0),
     },
+    // activityAverage: 0,
     latestActivities: new Array(14).fill(0),
-    nActiveDays: 0,
+    sumLatestActivities: 0,
     latestEventDate: new Date(0),
     firstAvailableEventDate,
   };
@@ -66,6 +70,7 @@ function latestActivities(dataset: Dataset, u: User, eventDay: number) {
   if (delta > 13) return;
   if (u.latestActivities[delta] >= 9) return;
   u.latestActivities[delta]++;
+  u.sumLatestActivities++;
 }
 
 export function addActivity(
@@ -85,6 +90,5 @@ export function addActivity(
   addToRetentionHeatmap(u, eventDay);
   latestActivities(dataset, u, eventDay);
 
-  u.nActiveDays++;
   u.latestEventDate = date;
 }
