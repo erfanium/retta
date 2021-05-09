@@ -6,11 +6,13 @@ import { cors } from "https://deno.land/x/abc@v1.3.1/middleware/cors.ts";
 import { getGrowingUsers } from "./methods/getGrowingUsers.ts";
 import { getTopUsers } from "./methods/getTopUsers.ts";
 import { getDecliningUsers } from "./methods/getDecliningUsers.ts";
+import { getRetentionChart } from "./methods/getRetentionChart.ts";
 
 const methods: Record<string, HandlerFunc> = {
   getGrowingUsers,
   getTopUsers,
-  getDecliningUsers
+  getDecliningUsers,
+  getRetentionChart
 };
 
 export const app = new Application();

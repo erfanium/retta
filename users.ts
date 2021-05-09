@@ -6,7 +6,7 @@ export interface User {
     daysActivity: Map<number, number>;
   };
   latestEventDate: Date;
-  firstAvailableEventDate: Date;
+  firstAvailableEventDay: number;
 }
 
 type Users = Record<string, User>;
@@ -31,7 +31,7 @@ function addUser(
       daysActivity: new Map(),
     },
     latestEventDate: new Date(0),
-    firstAvailableEventDate,
+    firstAvailableEventDay: dateToDay(firstAvailableEventDate),
   };
 
   users[id] = u;
@@ -57,18 +57,11 @@ function addUser(
 //   u.retention.heatmap[delta]++;
 // }
 
-export function addActivity(
-  users: Users,
-  id: string,
-  date: Date,
-  userRegisterDate: Date,
-) {
-  const u = users[id] || addUser(users, id, userRegisterDate, date);
+function addActivityToUser(u: User, date: Date) {
   if (date.getTime() - u.latestEventDate.getTime() < twoMin) return;
 
   const day = dateToDay(date);
 
-  // addToRetentionHeatmap(u, eventDay);
   const a = u.activities;
   let v = a.daysActivity.get(day);
   if (v === undefined) {
@@ -82,4 +75,19 @@ export function addActivity(
   }
 
   u.latestEventDate = date;
+}
+
+export function addActivity(
+  users: Users,
+  id: string,
+  date: Date,
+  registerDate: Date,
+) {
+  let u = users[id];
+  if (!u) {
+    u = addUser(users, id, registerDate, date);
+    addActivityToUser(u, registerDate);
+  }
+
+  addActivityToUser(u, date);
 }
