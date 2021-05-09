@@ -12,7 +12,7 @@ const f = await Deno.open(file);
 for await (const log of readCSVObjects(f)) {
   const date = new Date(log.date);
   const registerDate = getDate(decodeString(log.userID));
-  addActivity(dataset, log.userID, date, registerDate);
+  addActivity(dataset.users, log.userID, date, registerDate);
 }
 
 
