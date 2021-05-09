@@ -1,5 +1,5 @@
 import { HandlerFunc } from "https://deno.land/x/abc@v1.3.1/mod.ts";
-import { dataset, latestEventDay } from "../../data.ts";
+import { dataset, latestEventDay } from "../../mod.ts";
 
 export const getRetentionChart: HandlerFunc = function (ctx) {
   const nDays = Number(ctx.queryParams.nDays) || 7;
@@ -18,7 +18,6 @@ export const getRetentionChart: HandlerFunc = function (ctx) {
     if (u.registerDay > registerMaxDay - nDays) continue;
     if (u.registerDay < registerMinDay) continue;
     if (u.firstAvailableEventDay - u.registerDay > 0) continue;
-
     result[0]++;
     nUsers++;
 

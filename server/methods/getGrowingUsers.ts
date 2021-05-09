@@ -1,5 +1,5 @@
 import { HandlerFunc } from "https://deno.land/x/abc@v1.3.1/mod.ts";
-import { dataset, latestEventDay } from "../../data.ts";
+import { dataset, latestEventDay } from "../../mod.ts";
 import { genHeatmap } from "../../heatmap.ts";
 import { calculateRegression } from "../../regression.ts";
 
