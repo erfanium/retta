@@ -2,9 +2,12 @@ import { HandlerFunc } from "https://deno.land/x/abc@v1.3.1/mod.ts";
 import { dataset, latestEventDay } from "../../mod.ts";
 import { genHeatmap } from "../../heatmap.ts";
 import { calculateRegression } from "../../regression.ts";
+import { getUserName, getUserTags } from "../../client.ts";
 
 interface Result {
   id: string;
+  name?: string;
+  tags: string[];
   registerDay: number;
   heatmap: number[];
   slope: number;
@@ -42,13 +45,21 @@ export const getGrowingUsers: HandlerFunc = function (ctx) {
       id,
       registerDay: u.registerDay,
       heatmap: heatmap.values,
+      tags: [],
       slope,
       intercept,
       rating: (slope * 4) + limit(intercept, 1, -1),
     });
   }
 
-  return results
+  const promises = results
     .sort((a, b) => b.rating - a.rating)
-    .slice(page, (page + 1) * 20);
+    .slice(page, (page + 1) * 20)
+    .map(async (r) => {
+      r.name = await getUserName(r.id);
+      r.tags = await getUserTags(r.id)
+      return r;
+    });
+
+  return Promise.all(promises);
 };

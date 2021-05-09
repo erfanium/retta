@@ -89,5 +89,5 @@ export function setLatestEventDayFn(fn: () => Date) {
 }
 
 export function start() {
-  app.start({ port: 8000 });
+  app.start({ port: Number(Deno.env.get('PORT')) || 8000 });
 }

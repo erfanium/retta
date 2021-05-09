@@ -1,4 +1,4 @@
-import { readCSVObjects } from "https://deno.land/x/csv/mod.ts";
+import { readCSVObjects } from "https://deno.land/x/csv@v0.5.1/mod.ts";
 import { getDate } from "https://deno.land/x/objectid@0.1.0/mod.ts";
 import { decodeString } from "https://deno.land/std@0.95.0/encoding/hex.ts";
 import * as Retta from "./mod.ts";
