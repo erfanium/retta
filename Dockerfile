@@ -1,4 +1,4 @@
-FROM hayd/deno:1.9.2
+FROM denoland/deno:1.11.0
 
 EXPOSE 4100
 
